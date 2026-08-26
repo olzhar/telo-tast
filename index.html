@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Где живёт твоё напряжение — тест</title>
+<title>Тело не врёт — тест</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,6 +29,7 @@
     color:var(--ink);
     font-family:'Manrope',sans-serif;
     min-height:100vh;
+    min-height:100dvh;
     display:flex;
     justify-content:center;
   }
@@ -36,6 +37,7 @@
     width:100%;
     max-width:520px;
     min-height:100vh;
+    min-height:100dvh;
     background:var(--bg);
     display:flex;
     flex-direction:column;
@@ -397,6 +399,7 @@ let answers = blocks.map(b => new Array(b.items.length).fill(false));
 let stepIndex = 0;
 let resultQueue = [];
 let resultSubIndex = 0;
+let isEmptyResult = false;
 
 const main = document.getElementById('main');
 const footer = document.getElementById('footer');
@@ -410,6 +413,7 @@ function scores(){
 function computeResult(){
   const s = scores();
   const maxScore = Math.max(...s);
+  isEmptyResult = (maxScore === 0);
   let tied = blocks.filter((b,i)=> s[i]===maxScore).map(b=>b.key);
   if(maxScore < 3 && tied.length > 1){ tied = [tied[0]]; } // ниже порога — не считаем ничьей, берём первую
   resultQueue = tied;
@@ -423,7 +427,7 @@ function render(){
 
   if(stepIndex === 0) return renderIntro();
   if(stepIndex >=1 && stepIndex <=5) return renderQuestionBlock(stepIndex-1);
-  if(stepIndex === 6) return renderResult();
+  if(stepIndex === 6) return isEmptyResult ? renderEmpty() : renderResult();
   if(stepIndex === 7) return renderBridge();
   if(stepIndex === 8) return renderFinal();
 }
@@ -457,13 +461,33 @@ function goNext(){
   window.scrollTo(0,0);
 }
 
+function restartQuiz(){
+  answers = blocks.map(b => new Array(b.items.length).fill(false));
+  stepIndex = 0;
+  resultQueue = [];
+  resultSubIndex = 0;
+  isEmptyResult = false;
+  render();
+  window.scrollTo(0,0);
+}
+
+function renderEmpty(){
+  main.innerHTML = `
+    <div class="eyebrow">Хм, похоже на пустой ответ</div>
+    <h1>Не отметила ни одного пункта</h1>
+    <p class="lede">Или тебе сейчас правда легко и ничего не откликнулось — это тоже результат. Или тест прошёл слишком быстро, и стоит пройти ещё раз внимательнее.</p>
+    <p class="lede">Попробуй ещё раз и отмечай честно всё, что откликается.</p>
+  `;
+  footer.innerHTML = `<button class="btn" onclick="restartQuiz()">Пройти ещё раз</button>`;
+}
+
 /* ---------- ЭКРАНЫ ---------- */
 function renderIntro(){
   main.innerHTML = `
     <div class="eyebrow">Тест · 5 зон тела · 3 минуты</div>
-    <h1>Где живёт твоё напряжение?</h1>
+    <h1>Тело не врёт — узнай, что оно тебе говорит</h1>
     <p class="lede">5 зон тела, которые знают о тебе больше, чем ты сама себе признаёшься.<br><br>
-    Отметь то, в чём узнала себя. Не думай долго — просто читай и отмечай.</p>
+    Отметь то, что откликается. Не думай долго — просто читай и отмечай.</p>
   `;
   footer.innerHTML = `<button class="btn" onclick="goNext()">Начать тест</button>`;
 }
@@ -507,7 +531,7 @@ function renderResult(){
       <div class="gauge-ends"><span>Слабо выражено</span><span>Сильно выражено</span></div>
     </div>
     <div class="info-box">
-      <div class="label">Попробуй сегодня</div>
+      <div class="label">Практика • Попробуй сегодня</div>
       ${r.tip.map(t=>`<p>${t}</p>`).join('')}
     </div>
   `;
@@ -527,9 +551,9 @@ function renderBridge(){
       <div class="label">Результаты моих клиенток</div>
       <p>Клиентки отмечают не только рост энергии — у многих перестают ныть плечи, шея и спина, а пищеварение работает спокойнее.</p>
     </div>
-    <p class="lede" style="margin-top:20px;">Боль в теле — редко просто боль. Если устала разбираться со всем этим в одиночку — давай посмотрим на причины вместе.</p>
+    <div class="highlight">Тест показал, где именно сейчас проявляется напряжение.<br><br>Если устала разбираться в одиночку, давай на диагностике вместе посмотрим настоящие причины — в твоей конкретной ситуации.</div>
   `;
-  footer.innerHTML = `<button class="btn" onclick="goNext()">Что с этим делать</button>`;
+  footer.innerHTML = `<button class="btn" onclick="goNext()">Посмотреть настоящие причины</button>`;
 }
 
 function renderFinal(){
