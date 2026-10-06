@@ -565,6 +565,39 @@
   .practice-sec .pill{position:absolute;top:-15px;left:16px;margin:0;}
   .practice-sec p{font-style:normal;font-weight:400;}
   .blk.ok-list{background:var(--accent-soft);} .blk.ok-list li::before{display:none;} .blk.ok-list li{padding-left:0;}
+
+  .score-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:20px 0;font-size:12.5px;}
+  .score-table td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6;}
+  .score-table tr:last-child td{border-bottom:none;}
+  .score-cell-name{width:34%;font-weight:700;color:var(--accent);}
+  .score-cell-count{display:block;font-weight:400;color:var(--ink-soft);font-size:11.5px;margin-top:2px;}
+  .score-cell-tags{color:var(--ink-soft);}
+  .score-cell-tags span{display:block;}
+  .gift-box{background:var(--gold-soft);border-radius:16px;padding:20px;margin:22px 0;}
+  @keyframes pulseColor{0%{background:var(--accent);}50%{background:var(--gold);}100%{background:var(--accent);}}
+  .btn.pulse{animation:pulseColor 2.2s ease-in-out infinite;}
+  .intro-line{font-family:'Fraunces',serif;font-size:19px;line-height:1.5;color:var(--ink);margin:0 0 18px;}
+  .intro-line b{color:var(--accent);font-weight:600;}
+  .blk{border-radius:14px;padding:16px 18px;margin:0 0 14px;}
+  .blk .bl{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;}
+  .blk p{margin:0;font-size:15px;line-height:1.6;color:var(--ink);}
+  .blk ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .blk li{position:relative;padding-left:20px;font-size:15px;line-height:1.5;color:var(--ink);}
+  .blk li::before{content:'';position:absolute;left:4px;top:9px;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.75;}
+  .blk.body{background:var(--accent-soft);}   .blk.body .bl{color:var(--accent);}
+  .blk.risk{background:var(--warn-soft);}     .blk.risk .bl{color:var(--warn);} .blk.risk li{color:var(--ink);} .blk.risk li::before{background:var(--warn);}
+  .blk.psy{background:var(--gold-soft);}      .blk.psy .bl{color:var(--gold);}
+  .blk .practice{border-top:1px solid rgba(185,139,46,.35);margin-top:14px;padding-top:12px;}
+  .blk .practice .bl{color:var(--ink-soft);margin-bottom:6px;}
+  .blk .practice p{margin:0 0 6px;}
+  .plain{padding:16px 2px 4px;margin:0 0 6px;border-top:1px solid var(--line);}
+  .plain .pl{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .plain p{margin:0 0 8px;font-size:15.5px;line-height:1.65;color:var(--ink);}
+  .pill{display:inline-block;background:#7A4F63;color:#fff;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px;}
+  .plain.practice-sec{position:relative;border:1.5px solid #7A4F63;border-radius:16px;padding:26px 18px 12px;margin:30px 0 8px;}
+  .practice-sec .pill{position:absolute;top:-15px;left:16px;margin:0;}
+  .practice-sec p{font-style:normal;font-weight:400;}
+  .blk.ok-list{background:var(--accent-soft);} .blk.ok-list li::before{display:none;} .blk.ok-list li{padding-left:0;}
 </style>
 </head>
 <body>
@@ -593,10 +626,10 @@ const blocks = [
       'К вечеру шея устаёт, и руки сами тянутся её размять',
       'Шея хрустит или затекает, бывает трудно повернуть голову',
       'Несколько часов подряд провожу за компьютером и смотрю в телефон, опустив голову',
-      'Часто соглашаюсь, хотя внутри хочется отказаться',
+      'Часто соглашаюсь, хотя внутри хочется отказаться, и трудно менять решение, даже когда понимаю, что пора',
       'Шея почти не беспокоит, но хочу, чтобы так и оставалось — не ждать, пока зажмёт'
     ],
-    tags:['Шея устаёт к вечеру','Хруст, затёкшая шея','Часы за компьютером и телефоном с опущенной головой','Соглашаюсь, хотя хочу отказаться','Хочу сохранить шею свободной']
+    tags:['Шея устаёт к вечеру','Хруст, затёкшая шея','Часы за компьютером и телефоном с опущенной головой','Соглашаюсь и держусь за решения','Хочу сохранить шею свободной']
   },
   {
     key:'plechi',
@@ -656,7 +689,7 @@ const resultTexts = {
     img:true,
     body:'Голова весит 4–5 кг, а при наклоне вперёд — над экраном или телефоном — нагрузка на шею возрастает в несколько раз. Мышцы шеи и верхней части спины долго остаются в напряжении, хуже получают кровь и кислород, и к вечеру появляются скованность, хруст и тяжесть.',
     risks:['головные боли напряжения','тяжесть в висках и челюсти','усталость глаз','онемение в руках','снижение подвижности шеи'],
-    psy:'шея — это гибкость: способность повернуть голову, посмотреть на ситуацию с другой стороны и изменить курс. Когда мы привыкли «держать линию» и не разрешаем себе менять решения, шея первой становится жёсткой.',
+    psy:'шея — это гибкость: способность повернуть голову, посмотреть на ситуацию с другой стороны и сказать «нет», когда не хочется. Когда мы соглашаемся, хотя внутри хочется отказаться, и держимся за решение, даже когда пора что-то менять, шея первой становится жёсткой.',
     tip:[
       'Медленно поверни голову вправо и глазами посмотри вправо.',
       'Медленно поверни голову влево и глазами посмотри влево.',
